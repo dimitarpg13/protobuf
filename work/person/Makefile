@@ -1,7 +1,7 @@
 include_path:=/usr/local/include
 library_path:=/usr/local/lib
 
-objects = person_test.o person_writer.o person_reader.o socker_server.o 
+objects = person_test.o person_writer.o person_reader.o socket_server.o
 
 all: person_test person_reader person_writer socket_server
 
@@ -21,3 +21,4 @@ socket_server:
 .PHONY: clean
 clean:
 	rm -f $(objects) person_test person_reader person_writer socket_server 
+
