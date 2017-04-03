@@ -65,8 +65,8 @@ int main(int argc, char *argv[])
     std::cout << phone1.number() << '\n' << '\n';
   }
 
-  n = write(newsockfd, "I got your Person",18);
-  if (n < 0) error("ERROR writing to socket");
+  //n = write(newsockfd, "I got your Person",18);
+  //if (n < 0) error("ERROR writing to socket");
   close(newsockfd);
   close(sockfd);
   return 0; 
