@@ -62,15 +62,14 @@ void handle_get(http_request request)
   {
     answer[p.first] = json::value::string(p.second);
   } 
-
   request.reply(status_codes::OK, answer);
+  TRACE(u8"POST done.\n");
 }
 
 void handle_request(http_request request,
                     function<void(const json::value &, json::value &)> action)
 {
    json::value answer;
-
    request
        .extract_json()
        .then([&answer, &action](pplx::task<json::value> task) {
@@ -95,37 +94,26 @@ void handle_request(http_request request,
 void handle_post(http_request request)
 {
    TRACE(u8"\nhandle POST\n");
-   cout << request.to_string() << endl;
    handle_request(
        request,
        [](const json::value & jvalue, json::value & answer)
        {
-         TRACE(u8"Inside the POST request handler!\n");
-         if (jvalue.size() == 0)
-            TRACE(u8"POST jvalue is with size 0!\n");
-         else
-            TRACE(u8"POST jvalue is with non-zero size!\n");
-         TRACE(jvalue.as_string());
-         for (auto const & e : jvalue.as_object())
+         for (auto const & e : jvalue.as_array())
          {
-            TRACE(u8"Inside the POST for loop!\n");
-            //if (e.second.is_string())
+            auto key = e.as_string();
+            auto pos = dictionary.find(key);
+            if (pos == dictionary.end())
             {
-               auto key = e.second.as_string();
-               auto pos = dictionary.find(key);
-               if (pos == dictionary.end())
-               {
-                 TRACE_ACTION(u8"<post>",key,u8"<nil>");     
-                 answer[key] = json::value::string(u8"<nil>");
-               }
-               else
-               {
-                 TRACE_ACTION(u8"<post>",key,pos->second);     
-                 answer[pos->first]= json::value::string(pos->second);
-               }
+               TRACE_ACTION(u8"<post>",key,u8"<nil>");     
+               answer[key] = json::value::string(u8"<nil>");
+            }
+            else
+            {
+               TRACE_ACTION(u8"<post>",key,pos->second);     
+               answer[pos->first]= json::value::string(pos->second);
             }
          }
-         TRACE(u8"Finished POST!\n");
+         TRACE(u8"POST done.\n");
        }
     );
 }
@@ -138,28 +126,25 @@ void handle_put(http_request request)
        request,
        [](const json::value & jvalue, json::value & answer)
        {
-           TRACE(jvalue.as_string());
            for (auto const & e : jvalue.as_object())
            {
-               //if (e.is_string())
+               auto key = e.first;
+               auto value = e.second;
+
+               if (dictionary.find(key) == dictionary.end())
                {
-                  auto key = e.first;
-                  auto value = e.second;
-
-                  if (dictionary.find(key) == dictionary.end())
-                  {
-                     TRACE_ACTION(u8"added", key, value);
-                     answer[key] = json::value::string(u8"<put>");
-                  }
-                  else
-                  {
-                     TRACE_ACTION(u8"updated", key, value);
-                     answer[key] = json::value::string(u8"<updated>");
-                  }
-
-                  dictionary[key] = value.as_string();
+                  TRACE_ACTION(u8"added", key, value);
+                  answer[key] = json::value::string(u8"<put>");
                }
+               else
+               {
+                  TRACE_ACTION(u8"updated", key, value);
+                  answer[key] = json::value::string(u8"<updated>");
+               }
+
+               dictionary[key] = value.as_string();
            }
+           TRACE(u8"PUT done.\n");
        }
     );
 }
@@ -174,11 +159,11 @@ void handle_del(http_request request)
        [](const json::value & jvalue, json::value & answer)
        {
           set<utility::string_t> keys;
-          for (auto const & e : jvalue.as_object())
+          for (auto const & e : jvalue.as_array())
           {
-             if (e.second.is_string())
+           //  if (e.second.is_string())
              {
-                auto key = e.second.as_string();
+                auto key = e.as_string();
                 auto pos = dictionary.find(key);
                 if (pos == dictionary.end())
                 {
@@ -195,7 +180,7 @@ void handle_del(http_request request)
       
           for (auto const & key : keys)
               dictionary.erase(key);
-
+	  TRACE(u8"DEL done.\n");
        }
    );
 }
