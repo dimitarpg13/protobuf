@@ -15,7 +15,7 @@ void display_field_map_json(json::value & jvalue)
    {
       for (auto const & e : jvalue.as_object())
       {
-        cout << e.first << L" : " << e.second << endl;
+        cout << e.first << u8" : " << e.second << endl;
       }
 
    }
@@ -75,19 +75,21 @@ int main()
    getvalue[1] = json::value(u8"two");
    getvalue[2] = json::value(u8"three");
 
-   wcout << u8"\nget values (POST)\n";
+   cout << u8"\nget values (POST)\n";
    make_request(client, methods::POST, getvalue);
 
    auto delvalue = json::value::array();
    delvalue[0] = json::value(u8"one");
   
-   wcout << u8"\ndelete values\n";
+   cout << u8"\ndelete values\n";
    make_request(client, methods::DEL, delvalue);
 
-   wcout << u8"\nget values (POST)\n";
+
+   cout << u8"\nget values (POST)\n";
    make_request(client, methods::POST, getvalue); 
 
-   wcout << u8"\nget values (GET)\n";
+
+   cout << u8"\nget values (GET)\n";
    make_request(client, methods::GET, json::value::null());
 
    return 0;

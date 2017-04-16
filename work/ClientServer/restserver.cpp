@@ -25,8 +25,6 @@ void handle_del(http_request request);
 
 int main()
 {
-   utility::string_t uri_str = u8"http://localhost/restdemo";
-   uri myuri(uri_str);
    http_listener mylistener(u8"http://localhost:34568/restdemo");
 
    mylistener.support(methods::GET, handle_get);
@@ -69,7 +67,7 @@ void handle_get(http_request request)
 }
 
 void handle_request(http_request request,
-                    function<void(json::value &, json::value &)> action)
+                    function<void(const json::value &, json::value &)> action)
 {
    json::value answer;
 
@@ -78,8 +76,7 @@ void handle_request(http_request request,
        .then([&answer, &action](pplx::task<json::value> task) {
           try
           {
-            auto temp = task.get();
-            auto & jvalue = temp;
+            const auto & jvalue = task.get(); 
             if (!jvalue.is_null())
             {
               action(jvalue, answer);
@@ -98,27 +95,37 @@ void handle_request(http_request request,
 void handle_post(http_request request)
 {
    TRACE(u8"\nhandle POST\n");
-
+   cout << request.to_string() << endl;
    handle_request(
        request,
-       [](json::value & jvalue, json::value & answer)
+       [](const json::value & jvalue, json::value & answer)
        {
+         TRACE(u8"Inside the POST request handler!\n");
+         if (jvalue.size() == 0)
+            TRACE(u8"POST jvalue is with size 0!\n");
+         else
+            TRACE(u8"POST jvalue is with non-zero size!\n");
+         TRACE(jvalue.as_string());
          for (auto const & e : jvalue.as_object())
          {
-            if (e.second.is_string())
+            TRACE(u8"Inside the POST for loop!\n");
+            //if (e.second.is_string())
             {
                auto key = e.second.as_string();
                auto pos = dictionary.find(key);
                if (pos == dictionary.end())
                {
+                 TRACE_ACTION(u8"<post>",key,u8"<nil>");     
                  answer[key] = json::value::string(u8"<nil>");
                }
                else
                {
+                 TRACE_ACTION(u8"<post>",key,pos->second);     
                  answer[pos->first]= json::value::string(pos->second);
                }
             }
          }
+         TRACE(u8"Finished POST!\n");
        }
     );
 }
@@ -129,8 +136,9 @@ void handle_put(http_request request)
 
    handle_request(
        request,
-       [](json::value & jvalue, json::value & answer)
+       [](const json::value & jvalue, json::value & answer)
        {
+           TRACE(jvalue.as_string());
            for (auto const & e : jvalue.as_object())
            {
                //if (e.is_string())
@@ -163,7 +171,7 @@ void handle_del(http_request request)
 
    handle_request(
        request,
-       [](json::value & jvalue, json::value & answer)
+       [](const json::value & jvalue, json::value & answer)
        {
           set<utility::string_t> keys;
           for (auto const & e : jvalue.as_object())
