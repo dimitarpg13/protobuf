@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/opt/protobuf/work/ClientServer/restserver.cpp
+cpprest/http_listener.h
+-
+cpprest/json.h
+-
+iostream
+-
+map
+-
+set
+-
+string
+-
+

@@ -1,0 +1,17 @@
+/opt/protobuf/work/build.release/CMakeFiles/list_install_components.dir
+/opt/protobuf/work/build.release/CMakeFiles/install.dir
+/opt/protobuf/work/build.release/CMakeFiles/rebuild_cache.dir
+/opt/protobuf/work/build.release/CMakeFiles/edit_cache.dir
+/opt/protobuf/work/build.release/CMakeFiles/samples.dir
+/opt/protobuf/work/build.release/CMakeFiles/test.dir
+/opt/protobuf/work/build.release/CMakeFiles/install/strip.dir
+/opt/protobuf/work/build.release/CMakeFiles/install/local.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/list_install_components.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/install.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/rebuild_cache.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/test.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/RestServer.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/edit_cache.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/RestClient.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/install/strip.dir
+/opt/protobuf/work/build.release/ClientServer/CMakeFiles/install/local.dir
